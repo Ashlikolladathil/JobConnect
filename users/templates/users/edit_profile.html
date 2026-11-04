@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile - JobConnect</title>
+    <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+
+    <h1>Complete Your Profile</h1>
+
+    <div class="job-card">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="job-button">
+                Save Profile
+            </button>
+        </form>
+
+        <br>
+
+        <a href="{% url 'dashboard' %}" class="job-button">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recruiter Dashboard - JobConnect</title>
+    <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+
+    <h1>Recruiter Dashboard</h1>
+
+    <div class="job-card">
+        <h2>Welcome, Recruiter!</h2>
+
+        <p>Manage your job postings with JobConnect.</p>
+
+        <h3>Your Activities</h3>
+
+        <p>Post new jobs and manage your recruitment activities.</p>
+
+        <a href="{% url 'add_job' %}" class="job-button">
+            Post a Job
+        </a>
+
+        <a href="{% url 'recruiter_applications' %}" class="job-button">
+            Manage Applications
+        </a>
+
+        <a href="/" class="job-button">
+            View Available Jobs
+        </a>
+
+        <a href="{% url 'logout' %}" class="job-button">
+            Logout
+        </a>
+    </div>
+
+</body>
+</html>

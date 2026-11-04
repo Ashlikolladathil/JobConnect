@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Seeker Dashboard - JobConnect</title>
+    <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+
+    <h1>Job Seeker Dashboard</h1>
+
+    <div class="job-card">
+    <h2>Welcome to Your Dashboard!</h2>
+
+        <h3>Profile Completion</h3>
+
+        <p>
+            Your profile is {{ profile.profile_completion }}% complete.
+        </p>
+
+        <progress
+            value="{{ profile.profile_completion }}"
+            max="100">
+        </progress>
+
+        <br><br>
+
+        <a href="{% url 'edit_profile' %}" class="job-button">
+            Complete Your Profile
+        </a>
+
+        <p>Find your dream job with JobConnect.</p>
+
+        <h3>Your Activities</h3>
+
+        <p>Explore available jobs and plan your career.</p>
+
+
+        <p>
+            Track your job applications and check whether they are
+            Pending, Shortlisted, Accepted, or Rejected.
+        </p>
+
+        <a href="/" class="job-button">Browse Jobs</a>
+
+        <a href="{% url 'my_applications' %}" class="job-button">
+           My Applications
+        </a>
+
+        <a href="{% url 'logout' %}" class="job-button">Logout</a>
+        
+        <a href="{% url 'resume_analyzer' %}" class="job-button">
+          AI Resume Analyzer
+        </a>
+
+    </div>
+
+</body>
+</html>

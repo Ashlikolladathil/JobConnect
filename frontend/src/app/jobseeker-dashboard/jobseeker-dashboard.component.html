@@ -1,0 +1,229 @@
+<div class="dashboard-container">
+
+  <h1>Welcome to JobConnect!</h1>
+
+  <h2>Job Seeker Dashboard</h2>
+
+  <button type="button" class="logout-btn" (click)="logout()">
+    Logout
+  </button>
+
+  <p class="tagline">Find your dream job and build your career.</p>
+
+  <div class="resume-analyzer-link">
+    <h3>📄 AI Resume Analyzer</h3>
+
+    <p>Analyze your resume, discover missing skills, and check your job match.</p>
+
+    <button type="button" class="btn-analyze" (click)="openResumeAnalyzer()">
+      Analyze My Resume
+    </button>
+  </div>
+
+  <h2>Available Jobs</h2>
+
+  <p *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </p>
+
+  <p *ngIf="!errorMessage && jobs.length === 0" class="empty-msg">
+    No jobs are available at the moment.
+  </p>
+
+  <div class="dashboard-card" *ngFor="let job of jobs">
+
+    <h3>{{ job.title }}</h3>
+
+    <p><strong>Company:</strong> {{ job.company }}</p>
+
+    <p><strong>Location:</strong> {{ job.location }}</p>
+
+    <p><strong>Salary:</strong> {{ job.salary }}</p>
+
+    <p><strong>Required Skills:</strong> {{ job.required_skills }}</p>
+
+    <!-- AI Job Match -->
+    <div class="ai-match" *ngIf="job.match_percentage !== undefined">
+
+      <h4>AI Job Match</h4>
+
+      <p>
+        <strong>Match Percentage:</strong>
+        {{ job.match_percentage }}%
+      </p>
+
+      <!-- Match Level -->
+      <p
+        class="match-label"
+        [ngClass]="{
+        'high-label': job.match_percentage >= 70,
+        'medium-label': job.match_percentage >= 40 && job.match_percentage < 70,
+        'low-label': job.match_percentage < 40
+        }">
+
+        <span *ngIf="job.match_percentage >= 70">High Match</span>
+        <span *ngIf="job.match_percentage >= 40 && job.match_percentage < 70">Medium Match</span>
+        <span *ngIf="job.match_percentage < 40">Low Match</span>
+
+      </p>
+
+      <!-- Progress Bar -->
+      <div class="match-progress">
+        <div
+          class="match-progress-fill"
+          [style.width.%]="job.match_percentage"
+          [ngClass]="{
+          'high-match': job.match_percentage >= 70,
+          'medium-match': job.match_percentage >= 40 && job.match_percentage < 70,
+          'low-match': job.match_percentage < 40
+          }">
+        </div>
+      </div>
+
+      <!-- Matched Skills -->
+      <p>
+        <strong>Matched Skills:</strong>
+        <span *ngIf="job.matched_skills && job.matched_skills.length > 0">
+          {{ job.matched_skills.join(', ') }}
+        </span>
+        <span *ngIf="!job.matched_skills || job.matched_skills.length === 0">
+          No matching skills found.
+        </span>
+      </p>
+
+      <!-- Missing Skills -->
+      <p>
+        <strong>Missing Skills:</strong>
+        <span *ngIf="job.missing_skills && job.missing_skills.length > 0">
+          {{ job.missing_skills.join(', ') }}
+        </span>
+        <span *ngIf="!job.missing_skills || job.missing_skills.length === 0">
+          No missing skills!
+        </span>
+      </p>
+
+      <!-- Skill Recommendations -->
+      <div
+        class="skill-recommendations"
+        *ngIf="job.missing_skills && job.missing_skills.length > 0">
+
+        <h4>📚 Recommended Skills to Learn</h4>
+
+        <ul>
+          <li *ngFor="let skill of job.missing_skills">
+            {{ skill }}
+          </li>
+        </ul>
+
+      </div>
+
+    </div>
+
+    <button type="button" class="btn-view" (click)="viewJob(job.id)">
+      View Details
+    </button>
+
+  </div>
+
+</div>
+
+<hr>
+
+<h2>My Job Applications</h2>
+
+<div class="application-summary">
+
+  <div class="summary-card">
+    <h3>Total Applications</h3>
+    <p>{{ totalApplications }}</p>
+  </div>
+
+  <div class="summary-card pending-card">
+    <h3>Pending</h3>
+    <p>{{ pendingApplications }}</p>
+  </div>
+
+  <div class="summary-card shortlisted-card">
+    <h3>Shortlisted</h3>
+    <p>{{ shortlistedApplications }}</p>
+  </div>
+
+  <div class="summary-card accepted-card">
+    <h3>Accepted</h3>
+    <p>{{ acceptedApplications }}</p>
+  </div>
+
+  <div class="summary-card rejected-card">
+    <h3>Rejected</h3>
+    <p>{{ rejectedApplications }}</p>
+  </div>
+
+</div>
+
+<p *ngIf="applicationError" class="error">
+  {{ applicationError }}
+</p>
+
+<div *ngIf="applications.length === 0 && !applicationError" class="empty-msg">
+  <p>You haven't applied for any jobs yet.</p>
+</div>
+
+<div *ngFor="let application of applications" class="application-card">
+
+  <h3>{{ application.job_title }}</h3>
+
+  <div class="application-progress">
+    <p><strong>Application Progress</strong></p>
+
+    <div class="progress-steps">
+      <span
+        class="progress-step"
+        [class.active]="true">
+        Applied
+      </span>
+
+      <span
+        class="progress-step"
+        [class.active]="application.status !== 'pending'">
+        Under Review
+      </span>
+
+      <span
+        class="progress-step"
+        [class.active]="
+          application.status === 'shortlisted' ||
+          application.status === 'accepted'
+        ">
+        Shortlisted
+      </span>
+
+      <span
+        class="progress-step"
+        [class.active]="
+          application.status === 'accepted' ||
+          application.status === 'rejected'
+        ">
+        {{ application.status === 'rejected' ? 'Rejected' : 'Accepted' }}
+      </span>
+    </div>
+  </div>
+
+  <p><strong>Company:</strong> {{ application.company }}</p>
+
+  <p>
+    <strong>Status:</strong>
+    <span
+      class="application-status"
+      [ngClass]="'status-' + application.status">
+      {{ application.status | titlecase }}
+    </span>
+  </p>
+
+  <p *ngIf="application.rejection_reason">
+    <strong>Rejection Reason:</strong>
+    {{ application.rejection_reason }}
+  </p>
+
+  <hr>
+
+</div>

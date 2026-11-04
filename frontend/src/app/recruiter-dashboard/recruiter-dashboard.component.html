@@ -1,0 +1,92 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">J</span>
+      <span>JobConnect</span>
+    </div>
+
+    <button
+      class="recruiter-logout-btn"
+      type="button"
+      (click)="logout()">
+      Logout
+    </button>
+  </header>
+
+  <main>
+    <section class="welcome-section">
+      <div>
+        <p class="eyebrow">Recruiter workspace</p>
+        <h1>Welcome to JobConnect!</h1>
+        <h2>Recruiter Dashboard</h2>
+        <p class="welcome-copy">Find the right candidates for your company.</p>
+      </div>
+
+      <div class="welcome-illustration" aria-hidden="true">
+        <span>✦</span>
+        <span>✧</span>
+        <span>✦</span>
+      </div>
+    </section>
+
+    <section class="dashboard-grid" aria-label="Recruiter dashboard">
+      <div class="dashboard-card jobs-summary">
+        <div class="card-icon" aria-hidden="true">▤</div>
+        <div>
+          <h3>Total Jobs Posted</h3>
+          <p class="job-count">{{ totalJobs }}</p>
+          <p>Number of jobs you have posted.</p>
+        </div>
+      </div>
+
+      <p *ngIf="errorMessage" class="error-message" role="alert">
+        {{ errorMessage }}
+      </p>
+
+      <div
+        class="dashboard-card action-card"
+        (click)="openAddJob()"
+        (keydown.enter)="openAddJob()"
+        (keydown.space)="openAddJob(); $event.preventDefault()"
+        role="button"
+        tabindex="0">
+        <div class="card-icon" aria-hidden="true">＋</div>
+        <div>
+          <h3>Post a Job</h3>
+          <p>Create and publish new job opportunities.</p>
+        </div>
+        <span class="card-arrow" aria-hidden="true">↗</span>
+      </div>
+
+      <div
+        class="dashboard-card action-card"
+        (click)="openManageJobs()"
+        (keydown.enter)="openManageJobs()"
+        (keydown.space)="openManageJobs(); $event.preventDefault()"
+        role="button"
+        tabindex="0">
+        <div class="card-icon" aria-hidden="true">▣</div>
+        <div>
+          <h3>Manage Jobs</h3>
+          <p>View and manage your posted jobs.</p>
+        </div>
+        <span class="card-arrow" aria-hidden="true">↗</span>
+      </div>
+
+      <div
+        class="dashboard-card action-card"
+        (click)="openApplicants()"
+        (keydown.enter)="openApplicants()"
+        (keydown.space)="openApplicants(); $event.preventDefault()"
+        role="button"
+        tabindex="0">
+        <div class="card-icon" aria-hidden="true">◎</div>
+        <div>
+          <h3>View Applicants</h3>
+          <p>Review applications and find suitable candidates.</p>
+        </div>
+        <span class="card-arrow" aria-hidden="true">↗</span>
+      </div>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Django database and uploaded files
+*.sqlite3
+*.db
+jobconnect_db
+media/
+staticfiles/
+
+# Private environment variables
+.env
+.env.*
+!.env.example
+
+# Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

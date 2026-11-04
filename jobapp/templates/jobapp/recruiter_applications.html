@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recruiter Applications - JobConnect</title>
+    <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+
+    <h1>Manage Job Applications</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <div class="job-card">
+        <h2>Applications for Your Jobs</h2>
+
+        {% for application in applications %}
+            <div class="job-card">
+
+                <h3>{{ application.job.title }}</h3>
+
+                <p>
+                    <strong>Company:</strong>
+                    {{ application.job.company }}
+                </p>
+
+                <p>
+                    <strong>Applicant:</strong>
+                    {{ application.applicant.username }}
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    {{ application.applicant.email }}
+                </p>
+
+                <p>
+                    <strong>Applied On:</strong>
+                    {{ application.applied_at|date:"d M Y, h:i A" }}
+                </p>
+
+                <p>
+                    <strong>Current Status:</strong>
+                    {{ application.get_status_display }}
+                </p>
+
+                {% if application.rejection_reason %}
+                    <p>
+                        <strong>Rejection Reason:</strong>
+                        {{ application.rejection_reason }}
+                    </p>
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="application_id"
+                        value="{{ application.id }}"
+                    >
+
+                    <label for="status-{{ application.id }}">
+                        Update Application Status:
+                    </label>
+
+                    <select
+                        name="status"
+                        id="status-{{ application.id }}"
+                    >
+                        {% for value, label in application.STATUS_CHOICES %}
+                            <option
+                                value="{{ value }}"
+                                {% if application.status == value %}selected{% endif %}
+                            >
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <br><br>
+
+                    <label for="reason-{{ application.id }}">
+                        Rejection Reason (if applicable):
+                    </label>
+
+                    <textarea
+                        name="rejection_reason"
+                        id="reason-{{ application.id }}"
+                        rows="3"
+                        placeholder="Explain the reason for rejection"
+                    >{{ application.rejection_reason }}</textarea>
+
+                    <br><br>
+
+                    <button type="submit" class="job-button">
+                        Update Status
+                    </button>
+                </form>
+
+            </div>
+        {% empty %}
+            <p>No applications have been received for your jobs yet.</p>
+        {% endfor %}
+
+        <br>
+
+        <a href="/" class="job-button">Home</a>
+
+        <a href="{% url 'dashboard' %}" class="job-button">
+            Dashboard
+        </a>
+
+    </div>
+
+</body>
+</html>

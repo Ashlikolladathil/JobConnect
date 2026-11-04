@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyzer - JobConnect</title>
+
+    <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+
+    <h1>JobConnect Resume Analyzer</h1>
+
+    <div class="job-card">
+        <h2>Analyze Your Resume</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="job-button">
+                Analyze Resume
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+       .7
+        <div class="job-card">
+            <h2>Resume Analysis Results</h2>
+
+            <h3>Resume Score</h3>
+            <p>{{ result.resume_score }}%</p>
+
+            <h3>Job Match Percentage</h3>
+            <p>{{ result.job_match_percentage }}%</p>
+
+            <div style="width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden;">
+                <div style="width: {{ result.job_match_percentage }}%; background-color : #28a745; height: 20px; border-radius: 10px;">
+                </div>
+            </div>
+
+            <h3>Skills Found</h3>
+
+            {% if result.skills_found %}
+                <ul>
+                    {% for skill in result.skills_found %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No recognized skills found.</p>
+            {% endif %}
+
+            <h3>Missing Skills</h3>
+
+            {% if result.missing_skills %}
+                <ul>
+                    {% for skill in result.missing_skills %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>All listed job skills were found in the resume.</p>
+            {% endif %}
+
+            <h3>Improvement Suggestions</h3>
+
+            <ul>
+                {% for suggestion in result.suggestions %}
+                    <li>{{ suggestion }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <br>
+
+    <a href="{% url 'dashboard' %}" class="job-button">
+        Back to Dashboard
+    </a>
+
+</body>
+</html>
+

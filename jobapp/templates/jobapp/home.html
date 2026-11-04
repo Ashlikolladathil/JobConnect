@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JobConnect</title>
+     <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+    <h1>Welcome to JobConnect!</h1>
+
+    <div style="text-align: center; padding: 15px;">
+    <a href="{% url 'login' %}" class="job-button">Login</a>
+
+    <a href="{% url 'register' %}" class="job-button">Register</a>
+     </div>
+    <h2>Your Career Starts Here</h2>
+
+        <p>Find your dream job with JobConnect.</p>
+
+    <hr>
+
+    <h2>Available Jobs</h2>
+
+    {% if user.is_authenticated %}
+        {% if user.userprofile.role == 'recruiter' %}
+          <p style="margin-left: 25px;">
+              <a href="{% url 'add_job' %}" class="job-button">
+                 + Post a Job
+              </a>
+          </p>
+        {% endif %}
+    {% endif %}
+
+    {% for job in jobs %}
+
+    <div class="job-card">
+
+        <h3>{{ job.title }}</h3>
+
+        <p><strong>Company:</strong> {{ job.company }}</p>
+
+        <p><strong>Location:</strong> {{ job.location }}</p>
+
+        <p><strong>Salary:</strong> {{ job.salary }}</p>
+
+        <p>{{ job.description }}</p>
+
+     {% if user.is_authenticated %}
+        {% if user.userprofile.role == 'jobseeker' %}
+
+            <h4>AI Job Match: {{ job.match_percentage }}%</h4>
+
+            <p><strong>Matching Skills:</strong></p>
+            {% if job.skill_analysis.matched_skills %}
+                <ul>
+                    {% for skill in job.skill_analysis.matched_skills %}
+                        <li>✅ {{ skill|title }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No matching skills found.</p>
+            {% endif %}
+
+            <p><strong>Missing Skills:</strong></p>
+            {% if job.skill_analysis.missing_skills %}
+                <ul>
+                    {% for skill in job.skill_analysis.missing_skills %}
+                        <li>❌ {{ skill|title }}</li> 
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You have all the listed required skills!</p>
+            {% endif %}
+
+        {% endif %}
+    {% endif %}
+
+        <a href="{% url 'job_detail' job.id %}" class="job-button">
+            View Details
+        </a>
+
+        {% if user.is_authenticated %}
+           {% if user.userprofile.role == 'recruiter' %}
+   
+               <a href="{% url 'edit_job' job.id %}" class="job-button">
+                   Edit Job
+               </a>
+
+               <a href="{% url 'delete_job' job.id %}" class="job-button">
+                    Delete Job
+               </a>
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+    <hr>
+
+{% empty %}
+
+    <p>No jobs available at the moment.</p>
+
+{% endfor %}
+    
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<div class="apply-container">
+
+  <div class="apply-card">
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="goBackToJobDetails()">
+      ← Back to Job Details
+    </button>
+
+    <h1>Apply for Job</h1>
+
+    <p class="subtitle">Complete your details and submit your application.</p>
+
+    <!-- Profile Information -->
+    <div *ngIf="isProfileLoading" class="message loading-message">
+      <span class="spinner" aria-hidden="true"></span>
+      Loading your saved profile details...
+    </div>
+
+    <div *ngIf="!isProfileLoading" class="profile-edit-note">
+
+      <p>Your saved profile information is displayed below.</p>
+
+      <!-- Edit Button -->
+      <button
+        *ngIf="!isEditingProfile"
+        type="button"
+        class="edit-profile-btn"
+        (click)="isEditingProfile = true">
+        ✏️ Edit Details
+      </button>
+
+      <!-- Save Profile Button -->
+      <button
+        *ngIf="isEditingProfile"
+        type="button"
+        class="edit-profile-btn"
+        [disabled]="isSavingProfile"
+        (click)="saveProfile()">
+        {{ isSavingProfile ? 'Saving...' : 'Save Profile' }}
+      </button>
+
+    </div>
+
+    <form (ngSubmit)="submitApplication()">
+
+      <!-- Full Name -->
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input
+          type="text"
+          id="fullName"
+          name="fullName"
+          [(ngModel)]="fullName"
+          placeholder="Enter your full name"
+          [readonly]="!isEditingProfile"
+          required>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Enter your email address"
+          [readonly]="!isEditingProfile">
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          [(ngModel)]="phone"
+          placeholder="Enter your phone number"
+          [readonly]="!isEditingProfile">
+      </div>
+
+      <!-- Skills -->
+      <div class="form-group">
+        <label for="skills">Skills</label>
+        <textarea
+          id="skills"
+          name="skills"
+          [(ngModel)]="skills"
+          [readonly]="!isEditingProfile"
+          placeholder="Example: Python, Django, Angular, HTML, CSS"
+          rows="3">
+        </textarea>
+        <small>
+          Enter your relevant technical and professional skills.
+        </small>
+      </div>
+
+      <!-- Experience -->
+      <div class="form-group">
+        <label for="experience">Experience</label>
+        <textarea
+          id="experience"
+          name="experience"
+          [(ngModel)]="experience"
+          [readonly]="!isEditingProfile"
+          placeholder="Describe your work experience, internships, training, or projects. Freshers can mention their training and projects."
+          rows="4">
+        </textarea>
+      </div>
+
+      <!-- Resume Upload -->
+      <div class="form-group">
+        <label for="resume">Upload Resume (PDF or Word)</label>
+
+        <input
+          type="file"
+          id="resume"
+          name="resume"
+          accept=".pdf,.doc,.docx"
+          [disabled]="!isEditingProfile"
+          (change)="onResumeSelected($event)">
+
+        <div *ngIf="savedResumeUrl" class="saved-resume">
+          <p>Previously uploaded resume:</p>
+          <a
+            [href]="savedResumeUrl.startsWith('http') ? savedResumeUrl : 'http://127.0.0.1:8000' + savedResumeUrl"
+            target="_blank"
+            rel="noopener noreferrer">
+            View Saved Resume
+          </a>
+        </div>
+
+        <small *ngIf="resumeFile">
+          Selected file: {{ resumeFile.name }}
+        </small>
+
+        <small *ngIf="!resumeFile">
+          You can select a PDF or Word document.
+        </small>
+      </div>
+
+      <!-- Cover Letter -->
+      <div class="form-group">
+        <label for="coverLetter">Cover Letter</label>
+        <textarea
+          id="coverLetter"
+          name="coverLetter"
+          [(ngModel)]="coverLetter"
+          placeholder="Introduce yourself and explain why you are suitable for this job."
+          rows="6"
+          required>
+        </textarea>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Submitting...' : 'Submit Application' }}
+      </button>
+
+    </form>
+
+    <!-- Success or Error Message -->
+    <p
+      *ngIf="message"
+      class="message"
+      role="status"
+      aria-live="polite">
+      {{ message }}
+    </p>
+
+  </div>
+
+</div>

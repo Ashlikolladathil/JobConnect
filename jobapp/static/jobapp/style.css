@@ -1,0 +1,56 @@
+/* General page styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fb;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Main heading */
+h1 {
+    background-color: #173b67;
+    color: white;
+    text-align: center;
+    padding: 30px;
+    margin: 0;
+}
+
+/* Page headings */
+h2 {
+    color: #173b67;
+    margin: 25px;
+}
+
+/* Job information card */
+.job-card {
+    background-color: white;
+    margin: 20px 25px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Job title */
+h3 {
+    color: #1769aa;
+}
+
+/* Job details */
+p {
+    line-height: 1.6;
+}
+
+/* View Details button */
+.job-button {
+    display: inline-block;
+    background-color: #1769aa;
+    color: white;
+    padding: 10px 18px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.job-button:hover {
+    background-color: #104575;
+}

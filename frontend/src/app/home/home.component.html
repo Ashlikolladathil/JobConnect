@@ -1,0 +1,350 @@
+<!-- JobConnect Welcome Page -->
+<div class="home-page">
+
+  <!-- Navigation Bar -->
+  <header class="home-navbar">
+
+    <a routerLink="/" class="brand">
+      <span class="brand-icon">J</span>
+      <span>JobConnect</span>
+    </a>
+
+    <nav class="home-nav-links">
+      <a routerLink="/">Home</a>
+      <a href="#available-jobs">Available Jobs</a>
+    </nav>
+
+   <div class="nav-actions">
+
+
+  <!-- Show Login and Register to visitors -->
+  <ng-container *ngIf="!isLoggedIn">
+
+    <a routerLink="/login" class="login-btn">
+      Login
+    </a>
+
+    <a routerLink="/register" class="register-btn">
+      Register
+    </a>
+
+  </ng-container>
+
+
+  <!-- Job Seeker Navigation -->
+  <a
+    *ngIf="isLoggedIn && userRole === 'jobseeker'"
+    routerLink="/jobseeker-dashboard"
+    class="login-btn">
+
+    My Dashboard
+
+  </a>
+
+
+  <!-- Recruiter Navigation -->
+  <a
+    *ngIf="isLoggedIn && userRole === 'recruiter'"
+    routerLink="/recruiter-dashboard"
+    class="login-btn">
+
+    Recruiter Dashboard
+
+  </a>
+
+
+  <!-- Admin Navigation -->
+  <a
+    *ngIf="isLoggedIn && userRole === 'admin'"
+    routerLink="/admin-dashboard"
+    class="login-btn">
+
+    Admin Dashboard
+
+  </a>
+
+
+  <!-- Logout Button -->
+  <button
+    *ngIf="isLoggedIn"
+    type="button"
+    class="login-btn logout-home-btn"
+    (click)="logout()">
+
+    Logout
+
+  </button>
+
+</div>
+
+  </header>
+
+
+  <!-- Welcome Banner -->
+
+  <section class="hero-section">
+
+    <div class="hero-content">
+
+      <span class="hero-badge">YOUR FUTURE STARTS HERE</span>
+
+      <h1>
+        Welcome to <span>JobConnect!</span>
+      </h1>
+
+      <h2>Your Career Starts Here</h2>
+
+      <p>
+        Find your dream job with JobConnect.
+        Discover opportunities, showcase your skills,
+        and take the next step in your career.
+      </p>
+
+     <div class="hero-actions">
+
+  <!-- Visitors -->
+  <a
+    *ngIf="!isLoggedIn"
+    routerLink="/register"
+    class="secondary-btn">
+    Create an Account
+  </a>
+
+  <!-- Job Seeker -->
+  <a
+    *ngIf="isLoggedIn && userRole === 'jobseeker'"
+    routerLink="/jobseeker-dashboard"
+    class="secondary-btn">
+    Go to My Dashboard
+  </a>
+
+  <!-- Recruiter -->
+  <a
+    *ngIf="isLoggedIn && userRole === 'recruiter'"
+    routerLink="/recruiter-dashboard"
+    class="secondary-btn">
+    Go to Recruiter Dashboard
+  </a>
+
+  <!-- Admin -->
+  <a
+    *ngIf="isLoggedIn && userRole === 'admin'"
+    routerLink="/admin-dashboard"
+    class="secondary-btn">
+    Go to Admin Dashboard
+  </a>
+
+</div>
+
+    </div>
+
+    <div class="hero-illustration">
+      <div class="illustration-card">
+        <span class="illustration-icon">💼</span>
+        <h3>Your next opportunity awaits!</h3>
+        <p>Connect with employers and discover your potential.</p>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- Benefits Section -->
+  <section class="benefits-section">
+
+    <div class="section-heading">
+      <span>WHY JOBCONNECT?</span>
+      <h2>Build Your Career With Confidence</h2>
+      <p>Everything you need to take your next career step.</p>
+    </div>
+
+    <div class="benefits-grid">
+
+      <article class="benefit-card">
+        <div class="benefit-icon">🔎</div>
+        <h3>Find Opportunities</h3>
+        <p>Explore job openings and discover opportunities that match your goals.</p>
+      </article>
+
+      <article class="benefit-card">
+        <div class="benefit-icon">🎯</div>
+        <h3>AI Job Matching</h3>
+        <p>Explore skill-matching information to understand how your profile fits a job.</p>
+      </article>
+
+      <article class="benefit-card">
+        <div class="benefit-icon">📄</div>
+        <h3>Resume Analysis</h3>
+        <p>Review your resume and discover skills you may want to improve.</p>
+      </article>
+
+    </div>
+
+  </section>
+
+<!-- Available Jobs Section -->
+<section class="available-jobs-section" id="available-jobs">
+
+  <div class="section-heading">
+    <span>CAREER OPPORTUNITIES</span>
+    <h2>Available Jobs</h2>
+    <p>Find opportunities to take your career forward.</p>
+  </div>
+
+  <!-- Job Search Bar -->
+  <div
+    class="job-search"
+    *ngIf="!isLoading && !errorMessage && jobs.length > 0">
+
+    <label for="jobSearch">Find Your Next Opportunity</label>
+
+    <div class="job-search-box">
+      <span class="search-icon">🔍</span>
+
+      <input
+        type="search"
+        id="jobSearch"
+        name="jobSearch"
+        [(ngModel)]="searchTerm"
+        placeholder="Search by job title, company, or location..."
+        aria-label="Search jobs by title, company, or location">
+    </div>
+  </div>
+
+  <!-- Loading Message -->
+  <div *ngIf="isLoading" class="jobs-message">
+    <p>Loading available jobs...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div
+    *ngIf="errorMessage && !isLoading"
+    class="jobs-message error-message">
+
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Job Cards -->
+  <div
+    class="jobs-grid"
+    *ngIf="!isLoading && !errorMessage && filteredJobs.length > 0">
+
+    <article
+      class="job-card"
+      *ngFor="let job of filteredJobs">
+
+      <div class="job-card-header">
+        <div class="job-card-icon">💼</div>
+        <span class="job-badge">Job Opportunity</span>
+      </div>
+
+      <h3>{{ job.title }}</h3>
+
+      <p class="job-company">
+        🏢 {{ job.company }}
+      </p>
+
+      <p class="job-location">
+        📍 {{ job.location || 'Location not specified' }}
+      </p>
+
+      <p class="job-salary" *ngIf="job.salary">
+        💰 Salary: {{ job.salary }}
+      </p>
+
+      <p class="job-description">
+        {{ job.description || 'Explore this opportunity and learn more about the role.' }}
+      </p>
+
+      <div class="job-card-actions">
+
+        <a
+          [routerLink]="['/job-details', job.id]"
+          class="job-details-btn">
+          View Details
+        </a>
+
+        <!-- Visitors must create an account first -->
+        <a
+          *ngIf="!isLoggedIn"
+          routerLink="/register"
+          class="job-apply-btn">
+          Create Account
+        </a>
+
+       <!-- Job Seekers can apply if they have not applied yet -->
+      <a
+        *ngIf="isLoggedIn && userRole === 'jobseeker' && !hasApplied(job.id)"
+        [routerLink]="['/apply-job', job.id]"
+        class="job-apply-btn">
+        Apply Now
+      </a>
+
+<!-- Show this when the job seeker has already applied -->
+      <button
+         *ngIf="isLoggedIn && userRole === 'jobseeker' && hasApplied(job.id)"
+         type="button"
+         class="job-apply-btn already-applied-btn"
+         disabled>
+        ✓ Already Applied
+      </button>
+
+      </div>
+    </article>
+
+  </div>
+
+  <!-- No Jobs Available -->
+  <div
+    *ngIf="!isLoading && !errorMessage && jobs.length === 0"
+    class="jobs-message">
+
+    <div class="jobs-placeholder-icon">💼</div>
+
+    <h3>No Jobs Available Yet</h3>
+
+    <p>
+      New opportunities will appear here when recruiters post jobs.
+    </p>
+
+    <a routerLink="/login" class="primary-btn">
+      Login to JobConnect
+    </a>
+  </div>
+
+  <!-- No Matching Search Results -->
+  <div
+    *ngIf="!isLoading && !errorMessage &&
+           jobs.length > 0 && filteredJobs.length === 0"
+    class="jobs-message">
+
+    <h3>No Matching Jobs Found</h3>
+
+    <p>
+      Try another job title, company name, or location.
+    </p>
+
+    <button
+      type="button"
+      class="job-details-btn"
+      (click)="searchTerm = ''">
+      Clear Search
+    </button>
+  </div>
+
+</section>
+
+<!-- Footer -->
+<footer class="home-footer">
+
+  <div class="footer-brand">JobConnect</div>
+
+  <p>Connecting talent with opportunities.</p>
+
+  <small>
+    © 2026 JobConnect. All rights reserved.
+  </small>
+
+</footer>
+
+</div>

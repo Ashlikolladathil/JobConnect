@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Job - JobConnect</title>
+    <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+
+    <h1>Edit Job</h1>
+
+    <div class="job-card">
+        <h2>{{ job.title }}</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="job-button">
+                Update Job
+            </button>
+        </form>
+
+        <br>
+
+        <a href="/">Cancel and Return Home</a>
+    </div>
+
+</body>
+</html>

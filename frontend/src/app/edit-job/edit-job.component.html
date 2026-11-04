@@ -1,0 +1,82 @@
+<div class="edit-job-container">
+
+  <h2>Edit Job</h2>
+  <p>Update the details of your job opportunity.</p>
+
+  <form (ngSubmit)="updateJob()">
+
+    <div class="form-group">
+      <label for="title">Job Title</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        [(ngModel)]="job.title"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="company">Company Name</label>
+      <input
+        type="text"
+        id="company"
+        name="company"
+        [(ngModel)]="job.company"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="location">Location</label>
+      <input
+        type="text"
+        id="location"
+        name="location"
+        [(ngModel)]="job.location"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="salary">Salary</label>
+      <input
+        type="text"
+        id="salary"
+        name="salary"
+        [(ngModel)]="job.salary"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Job Description</label>
+      <textarea
+        id="description"
+        name="description"
+        [(ngModel)]="job.description"
+        required>
+      </textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="required_skills">Required Skills</label>
+      <input
+        type="text"
+        id="required_skills"
+        name="required_skills"
+        [(ngModel)]="job.required_skills">
+    </div>
+
+    <button type="submit" [disabled]="isSaving">
+      {{ isSaving ? 'Saving Changes...' : 'Update Job' }}
+    </button>
+
+  </form>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
+
+  <button
+    type="button"
+    class="back-button"
+    routerLink="/manage-jobs">
+    Back to Manage Jobs
+  </button>
+
+</div>

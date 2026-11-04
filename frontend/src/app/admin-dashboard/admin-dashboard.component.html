@@ -1,0 +1,620 @@
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h2>JobConnect</h2>
+      <p class="admin-label">ADMIN PANEL</p>
+    </div>
+
+    <nav>
+      <a class="active" href="javascript:void(0)">Dashboard</a>
+      <a href="javascript:void(0)">User Management</a>
+      <a href="javascript:void(0)">Job Management</a>
+      <a href="javascript:void(0)">Applications</a>
+      <a href="javascript:void(0)">Recruiters</a>
+      <a href="javascript:void(0)">Job Seekers</a>
+    </nav>
+
+    <button class="logout-btn" type="button" (click)="logout()">
+      Logout
+    </button>
+  </aside>
+
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1>Admin Dashboard</h1>
+        <p>Welcome to JobConnect Administration</p>
+      </div>
+
+      <div class="admin-profile">
+        <span class="avatar">A</span>
+        <div class="profile-info">
+          <strong>Administrator</strong>
+          <small>System Admin</small>
+        </div>
+      </div>
+    </header>
+
+
+    <!-- Dashboard Statistics -->
+    <section class="stats-grid">
+
+      <article class="stat-card users-card">
+        <div class="stat-card-header">
+          <div class="stat-icon">👥</div>
+          <small>Registered accounts</small>
+        </div>
+        <h3>Total Users</h3>
+        <p class="stat-number">{{ totalUsers }}</p>
+      </article>
+
+      <article class="stat-card jobs-card">
+        <div class="stat-card-header">
+          <div class="stat-icon">💼</div>
+          <small>Posted opportunities</small>
+        </div>
+        <h3>Total Jobs</h3>
+        <p class="stat-number">{{ totalJobs }}</p>
+      </article>
+
+      <article class="stat-card applications-card">
+        <div class="stat-card-header">
+          <div class="stat-icon">📄</div>
+          <small>Submitted applications</small>
+        </div>
+        <h3>Total Applications</h3>
+        <p class="stat-number">{{ totalApplications }}</p>
+      </article>
+
+      <article class="stat-card recruiters-card">
+        <div class="stat-card-header">
+          <div class="stat-icon">🏢</div>
+          <small>Registered recruiters</small>
+        </div>
+        <h3>Total Recruiters</h3>
+        <p class="stat-number">{{ totalRecruiters }}</p>
+      </article>
+
+      <article class="stat-card jobseekers-card">
+        <div class="stat-card-header">
+          <div class="stat-icon">👨‍💻</div>
+          <small>Registered job seekers</small>
+        </div>
+        <h3>Total Job Seekers</h3>
+        <p class="stat-number">{{ totalJobSeekers }}</p>
+      </article>
+
+    </section>
+
+
+    <!-- Statistics Bar Chart -->
+    <section class="chart-section">
+      <div class="section-heading">
+        <div>
+          <h2>📊 JobConnect Statistics Overview</h2>
+          <p>Compare registered users, posted jobs, applications, and recruiters.</p>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <canvas
+          baseChart
+          [type]="barChartType"
+          [data]="barChartData"
+          [options]="barChartOptions">
+        </canvas>
+      </div>
+    </section>
+
+
+    <!-- Application Status Doughnut Chart -->
+    <section class="chart-section">
+      <div class="section-heading">
+        <div>
+          <h2>🍩 Application Status Overview</h2>
+          <p>See how applications are distributed across different statuses.</p>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <canvas
+          baseChart
+          [type]="doughnutChartType"
+          [data]="doughnutChartData"
+          [options]="doughnutChartOptions">
+        </canvas>
+      </div>
+    </section>
+
+
+    <!-- Administration Overview -->
+    <section class="content-card">
+      <h2>Administration Overview</h2>
+
+      <p class="section-description">
+        Manage registered users, monitor job postings, and review
+        application activity across the JobConnect platform.
+      </p>
+
+      <div class="quick-actions">
+
+        <div class="action-item">
+          <span>👤</span>
+          <h3>User Management</h3>
+          <p>Review registered accounts and user roles.</p>
+        </div>
+
+        <div class="action-item">
+          <span>💼</span>
+          <h3>Job Management</h3>
+          <p>Review jobs posted by recruiters.</p>
+        </div>
+
+        <div class="action-item">
+          <span>📋</span>
+          <h3>Application Management</h3>
+          <p>Monitor job application activity.</p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- USER MANAGEMENT -->
+    <!-- ===================================== -->
+
+    <section class="content-card user-management">
+
+      <div class="section-heading">
+        <div>
+          <h2>User Management</h2>
+          <p>View registered users and their account details.</p>
+        </div>
+
+        <button
+          type="button"
+          class="manage-users-btn"
+          (click)="toggleUsers()">
+          {{ showUsers ? 'Hide Users' : 'View Users' }}
+        </button>
+      </div>
+
+      <!-- Application Search and Filters -->
+      <div
+        class="application-filters"
+        *ngIf="showApplications && !isLoadingApplications">
+
+        <input
+          type="text"
+          [(ngModel)]="applicationSearchText"
+          placeholder="Search by applicant or job title..."
+          aria-label="Search applications">
+
+        <select
+          [(ngModel)]="selectedApplicationStatus"
+          aria-label="Filter applications by status">
+
+          <option value="all">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="shortlisted">Shortlisted</option>
+          <option value="rejected">Rejected</option>
+          <option value="accepted">Accepted</option>
+
+        </select>
+
+      </div>
+
+      <p *ngIf="isLoadingUsers" class="status-message">
+        Loading users...
+      </p>
+
+      <p *ngIf="usersErrorMessage" class="error-message">
+        {{ usersErrorMessage }}
+      </p>
+
+      <div *ngIf="showUsers && !isLoadingUsers">
+
+        <div class="user-filters">
+
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            placeholder="Search by username or email..."
+            aria-label="Search users">
+
+          <select
+            [(ngModel)]="selectedRole"
+            aria-label="Filter users by role">
+
+            <option value="all">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="recruiter">Recruiter</option>
+            <option value="jobseeker">Job Seeker</option>
+
+          </select>
+
+          <select
+            [(ngModel)]="selectedStatus"
+            aria-label="Filter users by account status">
+
+            <option value="all">All Users</option>
+            <option value="active">Active Users</option>
+            <option value="inactive">Inactive Users</option>
+
+          </select>
+
+        </div>
+
+        <div class="table-container">
+
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Account Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let user of filteredUsers">
+
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email || 'Not provided' }}</td>
+                <td>{{ user.role }}</td>
+
+                <td>
+                  <span
+                    [class.active-status]="user.is_active"
+                    [class.inactive-status]="!user.is_active">
+                    {{ user.is_active ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+
+                <td>
+                  <button
+                    *ngIf="user.role.toLowerCase() !== 'admin'"
+                    type="button"
+                    class="manage-users-btn"
+                    [class.deactivate-btn]="user.is_active"
+                    [class.activate-btn]="!user.is_active"
+                    (click)="toggleAccountStatus(user)">
+                    {{ user.is_active ? 'Deactivate' : 'Activate' }}
+                  </button>
+
+                  <span
+                    *ngIf="user.role.toLowerCase() === 'admin'"
+                    class="protected-label">
+                    Protected
+                  </span>
+                </td>
+
+              </tr>
+
+              <tr *ngIf="filteredUsers.length === 0">
+                <td colspan="6" class="empty-state">
+                  No matching users found.
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- JOB MANAGEMENT -->
+    <!-- ===================================== -->
+
+    <section class="content-card job-management">
+
+      <div class="section-heading">
+        <div>
+          <h2>Job Management</h2>
+          <p>View all jobs posted by recruiters.</p>
+
+          <div
+            class="job-filters"
+            *ngIf="showJobs && !isLoadingJobs">
+
+            <input
+              type="text"
+              [(ngModel)]="jobSearchText"
+              placeholder="Search by job title or company..."
+              aria-label="Search jobs">
+
+            <select
+              [(ngModel)]="selectedJobStatus"
+              aria-label="Filter jobs by status">
+
+              <option value="all">All Jobs</option>
+              <option value="active">Active Jobs</option>
+              <option value="closed">Closed Jobs</option>
+
+            </select>
+
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="manage-users-btn"
+          (click)="toggleJobs()">
+          {{ showJobs ? 'Hide Jobs' : 'View Jobs' }}
+        </button>
+
+      </div>
+
+      <p *ngIf="isLoadingJobs" class="status-message">
+        Loading jobs...
+      </p>
+
+      <p *ngIf="jobsErrorMessage" class="error-message">
+        {{ jobsErrorMessage }}
+      </p>
+
+      <div
+        class="table-container"
+        *ngIf="showJobs && !isLoadingJobs">
+
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Job Title</th>
+              <th>Company</th>
+              <th>Location</th>
+              <th>Salary</th>
+              <th>Recruiter</th>
+              <th>Job Status</th>
+              <th>Posted Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let job of filteredJobs">
+              <td>{{ job.id }}</td>
+              <td>{{ job.title }}</td>
+              <td>{{ job.company }}</td>
+              <td>{{ job.location }}</td>
+              <td>{{ job.salary || 'Not specified' }}</td>
+              <td>{{ job.recruiter }}</td>
+              <td>
+                <span
+                  [class.active-status]="job.status === 'active'"
+                  [class.inactive-status]="job.status === 'closed'">
+                  {{ job.status | titlecase }}
+                </span>
+              </td>
+              <td>{{ job.created_at | date:'dd-MM-yyyy' }}</td>
+            </tr>
+
+            <tr *ngIf="jobs.length === 0">
+              <td colspan="8" class="empty-state">
+                No jobs found.
+              </td>
+            </tr>
+
+            <tr *ngIf="jobs.length > 0 && filteredJobs.length === 0">
+              <td colspan="8" class="empty-state">
+                No matching jobs found.
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- APPLICATION MANAGEMENT -->
+    <!-- ===================================== -->
+
+    <section class="content-card user-management">
+
+      <div class="section-heading">
+        <div>
+          <h2>Application Management</h2>
+          <p>View and monitor all job applications.</p>
+        </div>
+
+        <button
+          type="button"
+          class="manage-users-btn"
+          (click)="toggleApplications()">
+          {{ showApplications ? 'Hide Applications' : 'View Applications' }}
+        </button>
+
+      </div>
+
+      <select
+        class="application-job-filter"
+        [(ngModel)]="selectedApplicationJob"
+        aria-label="Filter applications by job">
+
+        <option value="all">All Jobs</option>
+
+        <option
+          *ngFor="let jobTitle of applicationJobTitles"
+          [value]="jobTitle">
+          {{ jobTitle }}
+        </option>
+
+      </select>
+
+      <p *ngIf="isLoadingApplications" class="status-message">
+        Loading applications...
+      </p>
+
+      <p *ngIf="applicationsErrorMessage" class="error-message">
+        {{ applicationsErrorMessage }}
+      </p>
+
+      <div
+        class="table-container"
+        *ngIf="showApplications && !isLoadingApplications">
+
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Applicant</th>
+              <th>Job Title</th>
+              <th>Company</th>
+              <th>Applied Date</th>
+              <th>Status</th>
+              <th>Rejection Reason</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let application of filteredApplications">
+              <td>{{ application.id }}</td>
+              <td>{{ application.applicant }}</td>
+              <td>{{ application.job_title }}</td>
+              <td>{{ application.company }}</td>
+              <td>{{ application.applied_at | date:'dd-MM-yyyy' }}</td>
+              <td>{{ application.status | titlecase }}</td>
+              <td>{{ application.rejection_reason || '—' }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="manage-users-btn"
+                  (click)="showApplicationDetails(application)">
+                  Details
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="applications.length === 0">
+              <td colspan="8" class="empty-state">No applications found.</td>
+            </tr>
+
+            <tr *ngIf="applications.length > 0 && filteredApplications.length === 0">
+              <td colspan="8" class="empty-state">No matching applications found.</td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+
+    </section>
+
+    <!-- Jobseeker Details Popup -->
+<div
+  class="details-modal"
+  *ngIf="selectedApplication as selected"
+  (click)="closeApplicationDetails()">
+
+  <div
+    class="details-modal-content"
+    (click)="$event.stopPropagation()">
+
+    <button
+      type="button"
+      class="close-modal-btn"
+      (click)="closeApplicationDetails()">
+      ✕
+    </button>
+
+    <h2>Jobseeker Details</h2>
+
+    <div *ngIf="selected.applicant_details as applicant">
+
+      <h3>Personal Information</h3>
+
+      <p><strong>Full Name:</strong>
+        {{ applicant.full_name || selected.applicant }}
+      </p>
+
+      <p><strong>Username:</strong> {{ applicant.username }}</p>
+      <p><strong>Email:</strong> {{ applicant.email }}</p>
+      <p><strong>Phone:</strong> {{ applicant.phone || 'Not provided' }}</p>
+      <p><strong>Location:</strong> {{ applicant.location || 'Not provided' }}</p>
+
+      <h3>Professional Information</h3>
+
+      <p><strong>Skills:</strong> {{ applicant.skills || 'Not provided' }}</p>
+      <p><strong>Education:</strong> {{ applicant.education || 'Not provided' }}</p>
+      <p><strong>Experience:</strong> {{ applicant.experience || 'Not provided' }}</p>
+
+      <h3>Resume</h3>
+
+      <a
+        *ngIf="applicant.resume_url"
+        [href]="applicant.resume_url"
+        target="_blank"
+        rel="noopener noreferrer">
+        📄 View / Download Resume
+      </a>
+
+      <p *ngIf="!applicant.resume_url">No resume uploaded.</p>
+
+      <h3>Application Information</h3>
+
+      <p><strong>Job:</strong> {{ selected.job_title }}</p>
+      <p><strong>Company:</strong> {{ selected.company }}</p>
+      <p><strong>Applied Date:</strong>
+        {{ selected.applied_at | date:'dd-MM-yyyy' }}
+      </p>
+      <p><strong>Status:</strong> {{ selected.status | titlecase }}</p>
+
+      <h3>Cover Letter</h3>
+
+      <p style="white-space: pre-wrap;">
+        {{ applicant.cover_letter || 'No cover letter provided.' }}
+      </p>
+
+      <div *ngIf="selected.rejection_reason">
+        <h3>Rejection Reason</h3>
+        <p>{{ selected.rejection_reason }}</p>
+      </div>
+
+    </div>
+
+    <div *ngIf="!selected.applicant_details">
+      <p>Applicant details are not available.</p>
+    </div>
+
+    <button
+      type="button"
+      class="manage-users-btn"
+      (click)="closeApplicationDetails()">
+      Close
+    </button>
+
+  </div>
+</div>
+
+    <!-- Footer -->
+    <footer>
+      JobConnect Admin Dashboard
+    </footer>
+
+  </main>
+
+</div>

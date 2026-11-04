@@ -1,0 +1,374 @@
+/* ============================================
+   Job Details — Modern UI/UX
+   ============================================ */
+
+:host {
+  --bg-gradient: linear-gradient(145deg, #f4f7fc 0%, #e8eef7 100%);
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-solid: #ffffff;
+  --border-soft: rgba(15, 42, 80, 0.06);
+  --border-strong: rgba(15, 42, 80, 0.12);
+  --text-primary: #0b1c2f;
+  --text-secondary: #425468;
+  --text-muted: #64748b;
+  --brand-900: #0a1e33;
+  --brand-700: #123a6e;
+  --brand-600: #1a4b8c;
+  --brand-500: #225aa8;
+  --accent-sky: #e3f0fa;
+  --accent-mint: #e7f5ee;
+  --accent-amber: #fdf3e2;
+  --shadow-sm: 0 2px 8px rgba(0, 20, 40, 0.04);
+  --shadow-md: 0 12px 28px -12px rgba(0, 30, 70, 0.18);
+  --shadow-lg: 0 28px 60px -20px rgba(0, 30, 70, 0.28);
+  --radius-xl: 2rem;
+  --radius-lg: 1.5rem;
+  --radius-md: 1rem;
+  --radius-pill: 999px;
+  --transition: 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: block;
+  min-height: 100%;
+  background: var(--bg-gradient);
+  padding: 2.5rem 1.5rem;
+  color: var(--text-primary);
+}
+
+/* ---------- Layout container ---------- */
+
+.job-details-container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ---------- Page title ---------- */
+
+.page-title {
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0 0 1.75rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.page-title::before {
+  content: "";
+  width: 6px;
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, var(--brand-500), var(--brand-700));
+}
+
+/* ---------- Error message ---------- */
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-left: 5px solid #ef4444;
+  color: #b91c1c;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  margin: 0 0 1.5rem 0;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.08);
+  animation: slideDown 0.3s ease-out;
+}
+
+.error-icon {
+  font-style: normal;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Main card ---------- */
+
+.job-details-card {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 2.75rem;
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* ---------- Header: title + meta chips ---------- */
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px dashed var(--border-strong);
+}
+
+.job-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  color: var(--brand-900);
+  margin: 0;
+}
+
+.job-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1rem 0.55rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-soft);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.meta-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.chip-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: #eef3fa;
+}
+
+.chip-value {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+/* Individual chip accent colors */
+.company-chip { border-color: #d8e6f7; }
+.company-chip .chip-label { background: var(--accent-sky); color: var(--brand-700); }
+
+.location-chip { border-color: #d6efe4; }
+.location-chip .chip-label { background: var(--accent-mint); color: #1f6b4a; }
+
+.salary-chip { border-color: #fbe5c6; }
+.salary-chip .chip-label { background: var(--accent-amber); color: #8a5a12; }
+
+/* ---------- Content sections ---------- */
+
+.description,
+.skills {
+  background: var(--surface-solid);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem 1.85rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+
+.description:hover,
+.skills:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+}
+
+.description h3,
+.skills h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--brand-700);
+  margin: 0 0 0.9rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.description h3::before,
+.skills h3::before {
+  content: "";
+  width: 4px;
+  height: 18px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--brand-500), var(--brand-700));
+}
+
+.skills h3::before {
+  background: linear-gradient(180deg, #2f9e6b, #1a6b46);
+}
+
+.description p,
+.skills p {
+  font-size: 0.97rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  margin: 0;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+/* Skills block slightly different surface */
+.skills {
+  background: linear-gradient(180deg, #f7fbff, #f0f6ff);
+}
+
+/* ---------- Action buttons ---------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  padding-top: 0.5rem;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 0.97rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.95rem 1.9rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition),
+              background var(--transition), border-color var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 48px;
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(34, 90, 168, 0.35);
+  outline-offset: 2px;
+}
+
+/* Primary — Apply */
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-900));
+  color: #ffffff;
+  box-shadow: 0 12px 24px -10px rgba(22, 78, 160, 0.55);
+}
+
+.btn-primary::after {
+  content: "→";
+  font-size: 1.1rem;
+  font-weight: 700;
+  transition: transform var(--transition);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+  transform: translateY(-2px);
+  box-shadow: 0 20px 32px -12px rgba(22, 78, 160, 0.6);
+}
+
+.btn-primary:hover::after {
+  transform: translateX(3px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 16px -8px rgba(22, 78, 160, 0.5);
+}
+
+/* Secondary — Back */
+.btn-secondary {
+  background: var(--surface-solid);
+  color: var(--brand-700);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary::before {
+  content: "←";
+  font-size: 1.05rem;
+  font-weight: 700;
+  transition: transform var(--transition);
+}
+
+.btn-secondary:hover {
+  background: #f5f9ff;
+  border-color: #b9cfe8;
+  color: var(--brand-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary:hover::before {
+  transform: translateX(-3px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 720px) {
+  :host {
+    padding: 1.75rem 1rem;
+  }
+
+  .job-details-card {
+    padding: 1.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    gap: 1.4rem;
+  }
+
+  .job-title {
+    font-size: 1.55rem;
+  }
+
+  .page-title {
+    font-size: 1.35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .description,
+  .skills {
+    padding: 1.35rem 1.35rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .meta-chip {
+    width: 100%;
+  }
+
+  .chip-value {
+    margin-left: auto;
+  }
+}

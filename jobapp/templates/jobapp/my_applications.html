@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Applications - JobConnect</title>
+    <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+
+    <h1>My Applications</h1>
+
+    <div class="job-card">
+        <h2>Your Job Application History</h2>
+
+        {% for application in applications %}
+            <div class="job-card">
+                <h3>{{ application.job.title }}</h3>
+
+                <p>
+                    <strong>Company:</strong>
+                    {{ application.job.company }}
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    {{ application.job.location }}
+                </p>
+
+                <p>
+                    <strong>Applied On:</strong>
+                    {{ application.applied_at|date:"d M Y, h:i A" }}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    {{ application.get_status_display }}
+                </p>
+
+                {% if application.status == 'rejected' and application.rejection_reason %}
+    
+                    <div class="job-card">
+                        <h4>Reason for Rejection</h4>
+                        <p>{{ application.rejection_reason }}</p>
+                    </div>
+                {% endif %}
+
+                <h4>Application Progress</h4>
+
+                <div class="job-card">
+                    {% if application.status == 'pending' %}
+                        <p>✅ Applied → ⏳ Under Review → Shortlisted → Interview → Final Decision</p>
+
+                    {% elif application.status == 'shortlisted' %}
+                        <p>✅ Applied → ✅ Under Review → 🎉 Shortlisted → Interview → Final Decision</p>
+
+                    {% elif application.status == 'accepted' %}
+                        <p>✅ Applied → ✅ Under Review → ✅ Shortlisted → 🎉 Selected</p>
+
+                    {% elif application.status == 'rejected' %}
+                        <p>✅ Applied → ❌ Rejected</p> 
+
+                    {% endif %} 
+
+                </div>
+
+                <a href="{% url 'job_detail' application.job.id %}"
+                   class="job-button">
+                    View Job
+                </a>
+            </div>
+        {% empty %}
+            <p>You haven't applied for any jobs yet.</p>
+        {% endfor %}
+
+        <br>
+
+        <a href="/" class="job-button">Browse Jobs</a>
+
+        <a href="{% url 'dashboard' %}" class="job-button">
+            Dashboard
+        </a>
+    </div>
+
+</body>
+</html>

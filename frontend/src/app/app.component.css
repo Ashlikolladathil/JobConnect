@@ -1,0 +1,154 @@
+/* Root Application */
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Login Page Background */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  box-sizing: border-box;
+}
+
+/* Login Card */
+.login-card {
+  width: 100%;
+  max-width: 630px;
+  padding: 45px 50px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(30, 64, 175, 0.12);
+  box-sizing: border-box;
+}
+
+/* Main Heading */
+.login-card h1 {
+  margin: 0 0 12px;
+  color: #2563eb;
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.login-card .subtitle {
+  margin: 0 0 30px;
+  color: #64748b;
+  font-size: 17px;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 25px;
+  color: #1e293b;
+  font-size: 27px;
+  text-align: center;
+}
+
+/* Form Groups */
+.login-card .form-group {
+  margin-bottom: 22px;
+}
+
+.login-card .form-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #334155;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Input Fields */
+.login-card .form-group input {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #1e293b;
+  font-size: 16px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-card .form-group input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Login Button */
+.login-card form button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 15px;
+  border: none;
+  border-radius: 9px;
+  background: #1976d2;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.login-card form button:hover {
+  background: #125eaa;
+}
+
+/* Login Message */
+.login-card .message {
+  margin-top: 20px;
+  color: #334155;
+  font-size: 16px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Registration Link */
+.login-card .register-text {
+  margin-top: 25px;
+  color: #475569;
+  font-size: 16px;
+  text-align: center;
+}
+
+.login-card .register-text a {
+  color: #1976d2;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-card .register-text a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Layout */
+@media (max-width: 600px) {
+  .login-container {
+    padding: 20px 12px;
+  }
+
+  .login-card {
+    padding: 30px 22px;
+  }
+
+  .login-card h1 {
+    font-size: 30px;
+  }
+
+  .login-card h2 {
+    font-size: 24px;
+  }
+
+  .login-card .subtitle {
+    font-size: 15px;
+  }
+}

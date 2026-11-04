@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Job - JobConnect</title>
+    <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+
+    <h1>Delete Job</h1>
+
+    <div class="job-card">
+
+        <h2>Confirm Deletion</h2>
+
+        <p>
+            Are you sure you want to delete
+            <strong>{{ job.title }}</strong>?
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <button type="submit" class="job-button">
+                Yes, Delete Job
+            </button>
+        </form>
+
+        <br>
+
+        <a href="/">Cancel and Return Home</a>
+
+    </div>
+
+</body>
+</html>

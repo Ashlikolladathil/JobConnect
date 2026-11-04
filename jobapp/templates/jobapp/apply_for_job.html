@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apply for Job - JobConnect</title>
+    <link rel="stylesheet" href="{% static 'jobapp/style.css' %}">
+</head>
+<body>
+
+    <h1>Job Application</h1>
+
+    <div class="job-card">
+        <h2>{{ job.title }}</h2>
+
+        <p><strong>Company:</strong> {{ job.company }}</p>
+        <p><strong>Location:</strong> {{ job.location }}</p>
+
+        <hr>
+
+        <h3>Confirm Your Application</h3>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="job-button">
+                Submit Application
+            </button>
+        </form>
+
+        <br>
+
+        <a href="{% url 'job_detail' job.id %}">
+            Back to Job Details
+        </a>
+    </div>
+
+</body>
+</html>

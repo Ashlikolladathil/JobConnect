@@ -1,0 +1,55 @@
+<div class="job-details-container">
+
+  <h1 class="page-title">Job Details</h1>
+
+  <p *ngIf="errorMessage" class="error-message">
+    <i class="error-icon">⚠</i>
+    {{ errorMessage }}
+  </p>
+
+  <div *ngIf="job" class="job-details-card">
+
+    <header class="card-header">
+      <h2 class="job-title">{{ job.title }}</h2>
+      <div class="job-meta">
+        <span class="meta-chip company-chip">
+          <span class="chip-label">Company</span>
+          <span class="chip-value">{{ job.company }}</span>
+        </span>
+        <span class="meta-chip location-chip">
+          <span class="chip-label">Location</span>
+          <span class="chip-value">{{ job.location }}</span>
+        </span>
+        <span class="meta-chip salary-chip">
+          <span class="chip-label">Salary</span>
+          <span class="chip-value">{{ job.salary }}</span>
+        </span>
+      </div>
+    </header>
+
+    <div class="description">
+      <h3>Job Description</h3>
+      <p>{{ job.description }}</p>
+    </div>
+
+    <div class="skills">
+      <h3>Required Skills</h3>
+      <p>{{ job.required_skills }}</p>
+    </div>
+
+    <div class="actions">
+      <button
+          type="button"
+          class="btn btn-primary"
+          [routerLink]="['/apply-job', job.id]">
+          Apply for Job
+      </button>
+
+      <button type="button" class="btn btn-secondary" routerLink="/jobseeker-dashboard">
+        Back to Jobs
+      </button>
+    </div>
+
+  </div>
+
+</div>

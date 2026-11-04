@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ job.title }} - JobConnect</title>
+</head>
+<body>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <h1>{{ job.title }}</h1>
+
+    <h2>Job Information</h2>
+
+    <p><strong>Company:</strong> {{ job.company }}</p>
+
+    <p><strong>Location:</strong> {{ job.location }}</p>
+
+    <p><strong>Salary:</strong> {{ job.salary }}</p>
+
+    <h3>Job Description</h3>
+
+    <p>{{ job.description }}</p>
+
+    <br>
+
+    {% if user.is_authenticated %}
+        {% if user.userprofile.role == 'jobseeker' %}
+            <a href="{% url 'apply_for_job' job.id %}" class="job-button">
+              Apply for Job
+            </a>
+        {% endif %}
+    {% endif %}
+
+    <a href="/">Back to Home</a>
+
+</body>
+</html>

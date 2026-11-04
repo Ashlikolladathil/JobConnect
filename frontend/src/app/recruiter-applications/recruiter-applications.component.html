@@ -1,0 +1,347 @@
+<div class="applications-container">
+
+  <h1>Applicant Management</h1>
+  <p class="page-subtitle">Review applicants for each of your posted jobs.</p>
+
+  <!-- Loading -->
+
+  <p *ngIf="isLoading" class="loading-state">
+    Loading jobs and applicants...
+  </p>
+
+  <!-- Error -->
+
+  <p *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </p>
+
+  <!-- No Jobs -->
+
+  <div
+    *ngIf="!isLoading && !errorMessage && jobs.length === 0"
+    class="empty-message">
+
+```
+<h3>No Jobs Posted Yet</h3>
+<p>Your posted jobs will appear here.</p>
+```
+
+  </div>
+
+  <!-- Job Sections -->
+
+  <div
+    class="job-application-section"
+    *ngFor="let job of jobs">
+
+```
+<div class="job-section-header">
+
+  <h2>{{ job.title }}</h2>
+
+  <p><strong>Company:</strong> {{ job.company }}</p>
+
+  <p><strong>Location:</strong> {{ job.location }}</p>
+
+  <p>
+    <strong>Required Skills:</strong>
+    {{ job.required_skills || 'Not specified' }}
+  </p>
+
+  <p>
+    <strong>Job Status:</strong>
+    {{ job.status || 'Active' }}
+  </p>
+
+  <h3>Total Applicants: {{ job.applicant_count }}</h3>
+
+  <button
+    type="button"
+    class="view-applicants-btn"
+    (click)="toggleJobApplicants(job.id)">
+
+    {{ isJobExpanded(job.id) ? 'Hide Applicants ▲' : 'View Applicants ▼' }}
+
+  </button>
+
+</div>
+
+<!-- Expandable Applicants Panel -->
+<div
+  *ngIf="isJobExpanded(job.id)"
+  class="applicants-panel">
+
+  <!-- No Applicants -->
+  <div
+    *ngIf="job.applications.length === 0"
+    class="empty-message">
+
+    <p>No applications received for this job yet.</p>
+
+  </div>
+
+  <!-- Applicants Under Each Job -->
+  <div
+    class="application-card"
+    *ngFor="let application of job.applications">
+
+    <h3>{{ application.applicant_name }}</h3>
+
+    <!-- Applicant Information -->
+    <h4>Applicant Information</h4>
+
+    <p>
+      <strong>Email:</strong>
+      {{ application.applicant_email }}
+    </p>
+
+    <p>
+      <strong>Phone:</strong>
+      {{ application.applicant_phone || 'Not provided' }}
+    </p>
+
+    <p>
+      <strong>Skills:</strong>
+      {{ application.applicant_skills || 'Not provided' }}
+    </p>
+
+    <p>
+      <strong>Experience:</strong>
+      {{ application.applicant_experience || 'Not provided' }}
+    </p>
+
+    <!-- Job Match Analysis -->
+    <div class="analysis-section">
+
+      <h4>Job Match Analysis</h4>
+
+      <div *ngIf="application.job_match as jobMatch; else noJobMatch">
+
+        <h3>
+          Job Match:
+          {{ jobMatch.match_percentage }}%
+        </h3>
+
+        <p>
+          <strong>Matched Skills:</strong>
+        </p>
+
+        <p *ngIf="jobMatch.matched_skills?.length > 0; else noMatchedSkills">
+          {{ jobMatch.matched_skills.join(', ') }}
+        </p>
+
+        <ng-template #noMatchedSkills>
+          <p>No matching skills found.</p>
+        </ng-template>
+
+        <p>
+          <strong>Missing Skills:</strong>
+        </p>
+
+        <p *ngIf="jobMatch.missing_skills?.length > 0; else noMissingSkills">
+          {{ jobMatch.missing_skills.join(', ') }}
+        </p>
+
+        <ng-template #noMissingSkills>
+          <p>No missing skills.</p>
+        </ng-template>
+
+      </div>
+
+      <ng-template #noJobMatch>
+        <p>Job match information is not available.</p>
+      </ng-template>
+
+    </div>
+
+    <!-- Resume -->
+    <h4>Resume</h4>
+
+    <div *ngIf="application.resume_url; else noResume">
+
+      <a
+        [href]="application.resume_url"
+        target="_blank"
+        rel="noopener noreferrer">
+        📄 View / Download Resume
+      </a>
+
+    </div>
+
+    <ng-template #noResume>
+      <p>No resume uploaded.</p>
+    </ng-template>
+
+    <!-- Resume Analysis -->
+    <div class="analysis-section">
+
+      <h4>Resume Analysis</h4>
+
+      <div
+        *ngIf="application.resume_analysis as resumeAnalysis; else noResumeAnalysis">
+
+        <!-- Analysis Error -->
+        <p *ngIf="resumeAnalysis.error" class="error-message">
+          {{ resumeAnalysis.error }}
+        </p>
+
+        <!-- Analysis Results -->
+        <div *ngIf="!resumeAnalysis.error">
+
+          <h3>
+            Resume Score:
+            {{ resumeAnalysis.resume_score }}%
+          </h3>
+
+          <h3>
+            Resume-Based Job Match:
+            {{ resumeAnalysis.job_match_percentage }}%
+          </h3>
+
+          <p><strong>Skills Found:</strong></p>
+
+          <p *ngIf="resumeAnalysis.skills_found?.length > 0; else noResumeSkills">
+            {{ resumeAnalysis.skills_found.join(', ') }}
+          </p>
+
+          <ng-template #noResumeSkills>
+            <p>No recognized skills found in the resume.</p>
+          </ng-template>
+
+          <p><strong>Matched Skills:</strong></p>
+
+          <p *ngIf="resumeAnalysis.matched_skills?.length > 0; else noResumeMatchedSkills">
+            {{ resumeAnalysis.matched_skills.join(', ') }}
+          </p>
+
+          <ng-template #noResumeMatchedSkills>
+            <p>No matching skills found in the resume.</p>
+          </ng-template>
+
+          <p><strong>Missing Skills:</strong></p>
+
+          <p *ngIf="resumeAnalysis.missing_skills?.length > 0; else noResumeMissingSkills">
+            {{ resumeAnalysis.missing_skills.join(', ') }}
+          </p>
+
+          <ng-template #noResumeMissingSkills>
+            <p>No missing skills.</p>
+          </ng-template>
+
+          <p><strong>Suggestions:</strong></p>
+
+          <p *ngIf="resumeAnalysis.suggestions?.length > 0; else noSuggestions">
+            {{ resumeAnalysis.suggestions.join(' ') }}
+          </p>
+
+          <ng-template #noSuggestions>
+            <p>No suggestions available.</p>
+          </ng-template>
+
+        </div>
+
+      </div>
+
+      <ng-template #noResumeAnalysis>
+        <p>Resume analysis is not available. The applicant may not have uploaded a resume.</p>
+      </ng-template>
+
+    </div>
+
+    <!-- Cover Letter -->
+    <h4>Cover Letter</h4>
+
+    <p style="white-space: pre-wrap;">
+      {{ application.cover_letter || 'No cover letter provided.' }}
+    </p>
+
+    <!-- Application Information -->
+    <p>
+      <strong>Applied On:</strong>
+      {{ application.applied_at | date:'mediumDate' }}
+    </p>
+
+    <p>
+      <strong>Current Status:</strong>
+
+      <span class="status-badge">
+        {{ application.status }}
+      </span>
+    </p>
+
+    <!-- Update Application Status -->
+    <div class="status-update-form">
+
+      <label [for]="'status-' + application.id">
+        Update Status:
+      </label>
+
+      <select
+        #statusSelect
+        [id]="'status-' + application.id"
+        [value]="application.status">
+
+        <option value="pending">Pending</option>
+        <option value="shortlisted">Shortlisted</option>
+        <option value="rejected">Rejected</option>
+        <option value="accepted">Accepted</option>
+
+      </select>
+
+      <label [for]="'reason-' + application.id">
+        Rejection Reason:
+      </label>
+
+      <textarea
+        #reasonInput
+        [id]="'reason-' + application.id"
+        [value]="application.rejection_reason || ''"
+        placeholder="Enter a reason if rejecting">
+      </textarea>
+
+      <button
+        type="button"
+        (click)="updateStatus(
+          application,
+          statusSelect.value,
+          reasonInput.value
+        )">
+
+        Save Status
+
+      </button>
+
+    </div>
+
+    <!-- Rejection Reason -->
+    <div
+      *ngIf="application.rejection_reason"
+      class="rejection-reason">
+
+      <strong>Rejection Reason:</strong>
+
+      <p>{{ application.rejection_reason }}</p>
+
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- Back to Dashboard -->
+
+<button
+ type="button"
+ class="back-button"
+ routerLink="/recruiter-dashboard">
+
+```
+Back to Dashboard
+```
+
+  </button>
+
+</div>

@@ -1,0 +1,494 @@
+/* =========================================================
+   JobConnect – Applicant Management
+   Modern UI
+   ========================================================= */
+
+:host {
+  display: block;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f4f7fc;
+  color: #1a2b3e;
+  line-height: 1.55;
+  padding: 2.5rem 2rem;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: border-box;
+}
+
+/* ----- Layout ----- */
+.applications-container {
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+/* ----- Headings & Text ----- */
+h1 {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0b1e2e;
+  margin: 0 0 0.35rem;
+  background: linear-gradient(135deg, #1e4c7a 0%, #2a7a9e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: #5b738c;
+  margin: 0 0 1.75rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0c2a44;
+  margin: 0 0 0.75rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a3a52;
+  margin: 0 0 0.5rem;
+}
+
+h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5b738c;
+  margin: 1.1rem 0 0.5rem;
+}
+
+p {
+  font-size: 0.94rem;
+  color: #3a5570;
+  margin: 0 0 0.5rem;
+}
+
+strong {
+  font-weight: 600;
+  color: #0f2a3f;
+}
+
+/* ----- Loading / Empty / Error ----- */
+.loading-state {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  border: 1px dashed #b8cde0;
+  color: #5b738c;
+  font-size: 0.95rem;
+  text-align: center;
+  margin: 1rem 0 1.5rem;
+}
+
+.empty-message {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.6rem;
+  text-align: center;
+  border: 1px dashed #b8cde0;
+  color: #7a8fa3;
+  margin: 1rem 0 1.25rem;
+}
+
+.empty-message h3 {
+  color: #5b738c;
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+.error-message {
+  background: #fff1f1;
+  color: #b33a3a;
+  padding: 0.8rem 1.3rem;
+  border-radius: 14px;
+  border: 1px solid #f5cccc;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ----- Job Section Card ----- */
+.job-application-section {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 1.9rem 2rem;
+  margin-bottom: 1.75rem;
+  border: 1px solid #e8eff7;
+  box-shadow: 0 14px 36px -20px rgba(0, 30, 60, 0.16);
+  transition: box-shadow 0.28s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.job-application-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1e4c7a, #4a9ecf);
+}
+
+.job-application-section:hover {
+  box-shadow: 0 22px 44px -22px rgba(0, 40, 80, 0.22);
+}
+
+.job-section-header h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.job-section-header h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e4c7a;
+  margin: 0.85rem 0 0.35rem;
+  background: #eef5fd;
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  border-radius: 40px;
+  border: 1px solid #cfe0f5;
+}
+
+/* ----- View Applicants Toggle Button ----- */
+.view-applicants-btn {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  margin-top: 0.85rem;
+  border-radius: 40px;
+  border: none;
+  background: linear-gradient(135deg, #1e4c7a, #2a7a9e);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 8px 18px -8px rgba(30, 76, 122, 0.5);
+  letter-spacing: 0.01em;
+}
+
+.view-applicants-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(30, 76, 122, 0.65);
+}
+
+.view-applicants-btn:active {
+  transform: translateY(0);
+}
+
+.view-applicants-btn:focus-visible {
+  outline: 3px solid rgba(42, 122, 158, 0.4);
+  outline-offset: 2px;
+}
+
+/* ----- Applicants Panel ----- */
+.applicants-panel {
+  margin-top: 1.5rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid #eef3f9;
+  animation: panel-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----- Application Card (Applicant) ----- */
+.application-card {
+  background: #f9fbfe;
+  border-radius: 18px;
+  padding: 1.5rem 1.6rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #e2ebf5;
+  border-left: 4px solid #4a9ecf;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.application-card:hover {
+  box-shadow: 0 12px 26px -18px rgba(0, 40, 80, 0.2);
+  border-color: #d4e2f0;
+  border-left-color: #1e4c7a;
+}
+
+.application-card > h3 {
+  font-size: 1.15rem;
+  color: #0c2a44;
+  margin-bottom: 0.35rem;
+}
+
+.application-card h4:first-of-type {
+  margin-top: 0.85rem;
+}
+
+/* ----- Resume Link ----- */
+.application-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e4c7a;
+  text-decoration: none;
+  padding: 0.45rem 1.05rem;
+  background: #ffffff;
+  border: 1px solid #cfe0f5;
+  border-radius: 40px;
+  transition: all 0.22s ease;
+}
+
+.application-card a:hover {
+  background: #eef5fd;
+  border-color: #a8c8e6;
+  color: #123a5e;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px -8px rgba(30, 76, 122, 0.3);
+}
+
+/* ----- Status Badge ----- */
+.status-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  padding: 0.28rem 0.95rem;
+  border-radius: 40px;
+  margin-left: 0.35rem;
+  letter-spacing: 0.02em;
+  background: #eef5fd;
+  color: #1e4c7a;
+  border: 1px solid #cfe0f5;
+}
+
+/* Auto color-code by status text */
+.application-card .status-badge {
+  background: #fff5dd;
+  color: #a06d0b;
+  border-color: #ffe2a3;
+}
+
+.application-card .status-badge:where(:not(:empty)) {
+  transition: all 0.2s ease;
+}
+
+/* ----- Status Update Form ----- */
+.status-update-form {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.15rem 1.25rem 1.25rem;
+  margin-top: 1.25rem;
+  border: 1px solid #e2ebf5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.status-update-form label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1a3a52;
+  letter-spacing: 0.01em;
+  margin-top: 0.25rem;
+}
+
+.status-update-form select,
+.status-update-form textarea {
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: #1a2b3e;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #d8e2ed;
+  background: #f9fbfe;
+  transition: all 0.22s ease;
+  outline: none;
+  width: 100%;
+}
+
+.status-update-form select {
+  cursor: pointer;
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #7a8fa3 50%),
+    linear-gradient(135deg, #7a8fa3 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% + 1px),
+    calc(100% - 13px) calc(50% + 1px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 2.5rem;
+}
+
+.status-update-form textarea {
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.status-update-form select:hover,
+.status-update-form textarea:hover {
+  border-color: #b8cbe0;
+  background: #ffffff;
+}
+
+.status-update-form select:focus,
+.status-update-form textarea:focus {
+  border-color: #2a7a9e;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(42, 122, 158, 0.12);
+}
+
+.status-update-form button {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.65rem 1.5rem;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+  border-radius: 40px;
+  border: none;
+  background: linear-gradient(135deg, #1e4c7a, #2a7a9e);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 8px 18px -8px rgba(30, 76, 122, 0.5);
+  letter-spacing: 0.02em;
+}
+
+.status-update-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(30, 76, 122, 0.65);
+}
+
+.status-update-form button:active {
+  transform: translateY(0);
+}
+
+.status-update-form button:focus-visible {
+  outline: 3px solid rgba(42, 122, 158, 0.4);
+  outline-offset: 2px;
+}
+
+/* ----- Rejection Reason Block ----- */
+.rejection-reason {
+  background: #fff5f5;
+  border-left: 4px solid #e74c3c;
+  border-radius: 12px;
+  padding: 0.85rem 1.1rem;
+  margin-top: 1rem;
+}
+
+.rejection-reason strong {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #b33a3a;
+  margin-bottom: 0.3rem;
+}
+
+.rejection-reason p {
+  color: #8a2f2f;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ----- Back Button ----- */
+.back-button {
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.7rem 1.7rem;
+  margin-top: 1rem;
+  border-radius: 40px;
+  border: 1px solid #d8e2ed;
+  background: #ffffff;
+  color: #1e4c7a;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 20, 40, 0.04);
+}
+
+.back-button:hover {
+  background: #f4f9ff;
+  border-color: #b8cbe0;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px -12px rgba(30, 76, 122, 0.3);
+}
+
+.back-button:active {
+  transform: translateY(0);
+}
+
+.back-button:focus-visible {
+  outline: 3px solid rgba(42, 122, 158, 0.4);
+  outline-offset: 2px;
+}
+
+/* ----- Status Badge Colors (based on text content via attribute) ----- */
+.application-card .status-badge {
+  /* default handled above; keep neutral for unknown values */
+}
+
+/* If you want precise per-status colors, add a class in the template
+   e.g. [ngClass]="'status-' + application.status". Otherwise the
+   neutral pill above is used. */
+
+/* ----- Responsive ----- */
+@media (max-width: 720px) {
+  :host {
+    padding: 1.5rem 1rem;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .job-application-section {
+    padding: 1.4rem 1.3rem;
+  }
+
+  .application-card {
+    padding: 1.25rem 1.2rem;
+  }
+
+  .status-update-form button {
+    align-self: stretch;
+    width: 100%;
+    text-align: center;
+  }
+
+  .back-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
